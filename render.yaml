@@ -9,9 +9,8 @@ services:
     name: college-erp
     runtime: python
     plan: free
-    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate"
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate && python manage.py seed_data --no-attendance"
     startCommand: "gunicorn CollegeERP.wsgi:application --workers 2 --timeout 120"
-    preDeployCommand: "python manage.py migrate && python manage.py seed_data --no-attendance"
     healthCheckPath: /accounts/login/
     envVars:
       - key: DJANGO_SECRET_KEY
