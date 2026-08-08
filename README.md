@@ -61,6 +61,23 @@ Open **http://127.0.0.1:8000/** in your browser.
 
 > To reset the database entirely, drop the tables and re-run `python manage.py migrate` then `python manage.py seed_data`.
 
+## Deploy on Render
+
+This repo ships with a `render.yaml` blueprint (web service + free PostgreSQL) and a `Procfile` for gunicorn. To deploy:
+
+1. Push this repository to GitHub.
+2. Go to **https://dashboard.render.com** → **New** → **Blueprint** and select this repo.
+3. Render reads `render.yaml`, creates the PostgreSQL database and web service, installs dependencies, runs `collectstatic` + `migrate`, and starts gunicorn automatically.
+
+Environment variables are handled automatically:
+
+- `DATABASE_URL` — wired from the Render PostgreSQL instance
+- `DJANGO_SECRET_KEY` — auto-generated
+- `DJANGO_DEBUG` — `False` in production
+- `DJANGO_ALLOWED_HOSTS` — `.onrender.com` and localhost
+
+After the first deploy, open the service's **Shell** tab and run `python manage.py seed_data` to load the demo data (admin, students, faculty, courses, timetable).
+
 ## Login Credentials
 
 ### Administrator
