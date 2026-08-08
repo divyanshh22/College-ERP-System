@@ -100,6 +100,42 @@ body {
   margin-bottom: 28px;
 }
 
+.demo-box {
+  background: var(--bg, #f8fafc);
+  border: 1px dashed var(--primary);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.demo-title {
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.demo-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+}
+
+.demo-row:last-child {
+  margin-bottom: 0;
+}
+
+.demo-row code {
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--primary);
+  padding: 1px 6px;
+  border-radius: 6px;
+}
+
 .form-control {
   border-radius: 10px;
   padding: 0.65rem 0.9rem;
