@@ -1,0 +1,47 @@
+{% extends 'info/base.html' %}
+{% load static %}
+
+{% block title %}Marks Entry | CollegeERP{% endblock %}
+
+{% block content %}
+  <div class="page-title">Enter Marks &mdash; {{ mc.name }}</div>
+  <div class="page-sub">{{ ass.course.name }} &middot; {{ ass.class_id }} &middot; Total: {{ mc.total_marks }}</div>
+
+  {% if c.student_set.all %}
+    <form action="{% url 'marks_confirm' mc.id %}" method="post">
+      {% csrf_token %}
+      <div class="card-modern card">
+        <div class="card-header"><i class="fas fa-chart-bar mr-2 text-primary"></i>Students</div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-modern">
+              <thead>
+                <tr>
+                  <th>Student Name</th>
+                  <th>Total Marks</th>
+                  <th>Enter Marks</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for s in c.student_set.all %}
+                <tr>
+                  <td class="font-weight-semibold">{{ s.name }}</td>
+                  <td>{{ mc.total_marks }}</td>
+                  <td style="width: 220px;">
+                    <input class="form-control" type="number" name="{{ s.USN }}" min="0" max="{{ mc.total_marks }}" value="0">
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <div class="text-right mt-3">
+            <button class="btn btn-primary" type="submit"><i class="fas fa-save mr-1"></i>Submit</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  {% else %}
+    <div class="alert alert-warning">No students in this class.</div>
+  {% endif %}
+{% endblock %}

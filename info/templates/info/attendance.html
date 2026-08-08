@@ -1,0 +1,49 @@
+{% extends 'info/base.html' %}
+{% load static %}
+
+{% block title %}Attendance | CollegeERP{% endblock %}
+
+{% block content %}
+  <div class="page-title">Attendance Summary</div>
+  <div class="page-sub">Per-subject attendance for your current semester.</div>
+
+  <div class="card-modern card">
+    <div class="card-header"><i class="fas fa-clipboard-check mr-2 text-primary"></i>Attendance</div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-modern">
+          <thead>
+            <tr>
+              <th>Course ID</th>
+              <th>Course Name</th>
+              <th>Attended</th>
+              <th>Total</th>
+              <th>Percentage</th>
+              <th>Classes to Attend</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for a in att_list %}
+            <tr>
+              <td class="font-weight-semibold">{{ a.course_id }}</td>
+              <td><a class="text-primary" href="{% url 'attendance_detail' a.student.USN a.course.id %}">{{ a.course.name }}</a></td>
+              <td>{{ a.att_class }}</td>
+              <td>{{ a.total_class }}</td>
+              <td>
+                {% if a.attendance < 75 %}
+                  <span class="badge-soft-danger">{{ a.attendance }}%</span>
+                {% else %}
+                  <span class="badge-soft-success">{{ a.attendance }}%</span>
+                {% endif %}
+              </td>
+              <td>{{ a.classes_to_attend }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" class="text-center text-muted py-4">No courses assigned yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

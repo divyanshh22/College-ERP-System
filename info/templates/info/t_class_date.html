@@ -1,0 +1,54 @@
+{% extends 'info/base.html' %}
+{% load static %}
+
+{% block title %}Attendance Dates | CollegeERP{% endblock %}
+
+{% block content %}
+  <div class="page-title">Attendance Dates</div>
+  <div class="page-sub">Mark or edit attendance for each conducted class.</div>
+
+  <div class="card-modern card">
+    <div class="card-header"><i class="fas fa-calendar-day mr-2 text-primary"></i>Classes</div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-modern">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Status</th>
+              <th class="text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for a in att_list %}
+            <tr>
+              <td class="font-weight-semibold">{{ a.date }}</td>
+              <td>
+                {% if a.status == 0 %}
+                  <span class="badge-soft-warning"><i class="fas fa-hourglass-half mr-1"></i>Not Marked</span>
+                {% elif a.status == 1 %}
+                  <span class="badge-soft-success"><i class="fas fa-check mr-1"></i>Marked</span>
+                {% else %}
+                  <span class="badge-soft-danger"><i class="fas fa-ban mr-1"></i>Cancelled</span>
+                {% endif %}
+              </td>
+              <td class="text-right">
+                {% if a.status == 0 %}
+                  <a class="btn btn-soft-primary btn-sm" href="{% url 't_attendance' a.id %}"><i class="fas fa-clipboard-check mr-1"></i>Enter Attendance</a>
+                  <a class="btn btn-soft-danger btn-sm" href="{% url 'cancel_class' a.id %}"><i class="fas fa-ban mr-1"></i>Cancel Class</a>
+                {% elif a.status == 1 %}
+                  <a class="btn btn-soft-warning btn-sm" href="{% url 'edit_att' a.id %}"><i class="fas fa-edit mr-1"></i>Edit Attendance</a>
+                {% else %}
+                  <a class="btn btn-soft-primary btn-sm" href="{% url 't_attendance' a.id %}"><i class="fas fa-clipboard-check mr-1"></i>Enter Attendance</a>
+                {% endif %}
+              </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="3" class="text-center text-muted py-4">No classes scheduled yet. Set an attendance date range in the admin panel.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

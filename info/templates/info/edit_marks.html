@@ -1,0 +1,43 @@
+{% extends 'info/base.html' %}
+{% load static %}
+
+{% block title %}Edit Marks | CollegeERP{% endblock %}
+
+{% block content %}
+  <div class="page-title">Edit Marks &mdash; {{ mc.name }}</div>
+  <div class="page-sub">Update marks for the selected test.</div>
+
+  <form action="{% url 'marks_confirm' mc.id %}" method="post">
+    {% csrf_token %}
+    <div class="card-modern card">
+      <div class="card-header"><i class="fas fa-edit mr-2 text-warning"></i>Students</div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-modern">
+            <thead>
+              <tr>
+                <th>Student Name</th>
+                <th>Total Marks</th>
+                <th>Enter Marks</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for m in m_list %}
+              <tr>
+                <td class="font-weight-semibold">{{ m.studentcourse.student.name }}</td>
+                <td>{{ m.total_marks }}</td>
+                <td style="width: 220px;">
+                  <input class="form-control" type="number" name="{{ m.studentcourse.student.USN }}" min="0" max="{{ m.total_marks }}" value="{{ m.marks1 }}">
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="text-right mt-3">
+          <button class="btn btn-primary" type="submit"><i class="fas fa-save mr-1"></i>Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </form>
+{% endblock %}

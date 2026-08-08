@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}College ERP{% endblock %}</title>
+    {% load static %}
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'info/bootstrap/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Custom styles -->
+    <link href="{% static 'info/css/custom.css' %}" rel="stylesheet">
+
+    {% block css %}
+    {% endblock %}
+
+  </head>
+
+  <body id="page-top">
+
+    <!-- Topbar -->
+    <nav class="navbar navbar-expand navbar-light erp-topbar">
+      <div class="container-fluid px-2">
+        <a class="navbar-brand erp-brand" href="{% url 'index' %}">
+          <i class="fas fa-graduation-cap mr-2"></i>CollegeERP
+        </a>
+
+        <ul class="navbar-nav ml-auto align-items-center">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="avatar mr-2">
+                {% if request.user.is_student %}
+                  {{ request.user.student.name|first }}
+                {% elif request.user.is_teacher %}
+                  {{ request.user.teacher.name|first }}
+                {% else %}
+                  {{ request.user.username|first|upper }}
+                {% endif %}
+              </span>
+              <span class="text-capitalize font-weight-semibold">
+                {% if request.user.is_student %}
+                  {{ request.user.student.name }}
+                {% elif request.user.is_teacher %}
+                  {{ request.user.teacher.name }}
+                {% else %}
+                  {{ request.user.username }}
+                {% endif %}
+              </span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+              <span class="dropdown-item-text small text-muted">
+                {% if request.user.is_student %}Student{% elif request.user.is_teacher %}Faculty{% else %}Administrator{% endif %}
+              </span>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                <i class="fas fa-sign-out-alt mr-2 text-danger"></i>Logout
+              </a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="d-flex">
+      <!-- Sidebar -->
+      <ul class="erp-sidebar list-unstyled mb-0 d-none d-md-block">
+
+        {% if request.user.is_superuser %}
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'index' %}">
+              <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'add_student' %}">
+              <i class="fas fa-user-plus"></i> Add Student
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'add_teacher' %}">
+              <i class="fas fa-chalkboard-teacher"></i> Add Faculty
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/">
+              <i class="fas fa-cog"></i> Admin Panel
+            </a>
+          </li>
+
+        {% elif request.user.is_student %}
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'index' %}">
+              <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'attendance' request.user.student.USN %}">
+              <i class="fas fa-clipboard-check"></i> Attendance
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'marks_list' request.user.student.USN %}">
+              <i class="fas fa-chart-bar"></i> Marks
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'timetable' request.user.student.class_id_id %}">
+              <i class="fas fa-calendar-alt"></i> Timetable
+            </a>
+          </li>
+
+        {% elif request.user.is_teacher %}
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'index' %}">
+              <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 't_clas' request.user.teacher.id 1 %}">
+              <i class="fas fa-clipboard-check"></i> Attendance
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 't_clas' request.user.teacher.id 2 %}">
+              <i class="fas fa-chart-bar"></i> Marks
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 't_timetable' request.user.teacher.id %}">
+              <i class="fas fa-calendar-alt"></i> Timetable
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 't_clas' request.user.teacher.id 3 %}">
+              <i class="fas fa-file-alt"></i> Reports
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+
+      <div class="erp-content">
+        {% block content %}
+        {% endblock %}
+
+        <div class="footer-note">CollegeERP &copy; {% now "Y" %} &mdash; Campus Management System &mdash; Developed by Divyansh &#128640;</div>
+      </div>
+    </div>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content rounded-lg">
+          <div class="modal-header border-0">
+            <h5 class="modal-title font-weight-bold" id="logoutModalLabel">Ready to Leave?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+          <div class="modal-footer border-0">
+            <button class="btn btn-soft-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="/accounts/logout">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="{% static 'info/bootstrap/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'info/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    {% block scripts %}
+    {% endblock %}
+  </body>
+
+</html>

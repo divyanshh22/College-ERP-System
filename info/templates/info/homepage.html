@@ -1,0 +1,108 @@
+{% extends 'info/base.html' %}
+{% load static %}
+
+{% block title %}Student Dashboard | CollegeERP{% endblock %}
+
+{% block content %}
+  <div class="hero-banner fade-up">
+    <h1>Welcome, {{ student.name }}!</h1>
+    <p><i class="fas fa-id-card mr-2"></i>{{ student.USN }} &middot; {{ student.class_id }}</p>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-md-4 mb-3">
+      <div class="stat-card">
+        <div class="stat-icon icon-indigo"><i class="fas fa-clipboard-check"></i></div>
+        <div>
+          <div class="stat-label">Attendance</div>
+          <div class="stat-value">{{ avg_att|floatformat:2 }}%</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="stat-card">
+        <div class="stat-icon icon-emerald"><i class="fas fa-book-open"></i></div>
+        <div>
+          <div class="stat-label">Subjects</div>
+          <div class="stat-value">{{ att_list.count }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="stat-card">
+        <div class="stat-icon icon-amber"><i class="fas fa-layer-group"></i></div>
+        <div>
+          <div class="stat-label">Semester</div>
+          <div class="stat-value">{{ student.class_id.sem }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="feature-card">
+        <div class="feature-icon icon-indigo"><i class="fas fa-clipboard-check"></i></div>
+        <h5>Attendance</h5>
+        <p>Track your per-subject attendance and see exactly how many classes you need to attend to stay above 75%.</p>
+        <a class="btn btn-soft-primary" href="{% url 'attendance' student.USN %}">View Attendance</a>
+      </div>
+    </div>
+
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="feature-card">
+        <div class="feature-icon icon-emerald"><i class="fas fa-chart-bar"></i></div>
+        <h5>Marks</h5>
+        <p>View marks for all your courses &mdash; internals, events and the semester end exam.</p>
+        <a class="btn btn-soft-primary" href="{% url 'marks_list' student.USN %}">View Marks</a>
+      </div>
+    </div>
+
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="feature-card">
+        <div class="feature-icon icon-amber"><i class="fas fa-calendar-alt"></i></div>
+        <h5>Timetable</h5>
+        <p>Your weekly schedule in a glance &mdash; see all your lectures by day and time slot.</p>
+        <a class="btn btn-soft-primary" href="{% url 'timetable' student.class_id_id %}">View Timetable</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-modern card">
+    <div class="card-header"><i class="fas fa-fire mr-2 text-warning"></i>Attendance at a glance</div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-modern">
+          <thead>
+            <tr>
+              <th>Course</th>
+              <th>Attended</th>
+              <th>Total</th>
+              <th>%</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for a in att_list %}
+            <tr>
+              <td><a class="font-weight-semibold text-primary" href="{% url 'attendance_detail' a.student.USN a.course.id %}">{{ a.course.name }}</a></td>
+              <td>{{ a.att_class }}</td>
+              <td>{{ a.total_class }}</td>
+              <td>{{ a.attendance }}</td>
+              <td>
+                {% if a.attendance < 75 %}
+                  <span class="badge-soft-danger"><i class="fas fa-exclamation-triangle mr-1"></i>Low</span>
+                {% else %}
+                  <span class="badge-soft-success"><i class="fas fa-check-circle mr-1"></i>Good</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" class="text-center text-muted py-4">No courses assigned yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

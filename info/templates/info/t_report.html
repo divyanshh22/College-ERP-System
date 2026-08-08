@@ -1,0 +1,51 @@
+{% extends 'info/base.html' %}
+{% load static %}
+
+{% block title %}Report | CollegeERP{% endblock %}
+
+{% block content %}
+  <div class="page-title">Subject Report</div>
+  <div class="page-sub">CIE and attendance summary for all students.</div>
+
+  <div class="card-modern card">
+    <div class="card-header"><i class="fas fa-file-alt mr-2 text-danger"></i>Report</div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-modern">
+          <thead>
+            <tr>
+              <th>Student USN</th>
+              <th>Student Name</th>
+              <th>Attendance %</th>
+              <th>CIE</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for sc in sc_list %}
+            <tr>
+              <td class="font-weight-semibold">{{ sc.student_id }}</td>
+              <td>{{ sc.student.name }}</td>
+              <td>
+                {% if sc.get_attendance < 75 %}
+                  <span class="badge-soft-danger">{{ sc.get_attendance }}%</span>
+                {% else %}
+                  <span class="badge-soft-success">{{ sc.get_attendance }}%</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if sc.get_cie < 25 %}
+                  <span class="badge-soft-danger">{{ sc.get_cie }}</span>
+                {% else %}
+                  <span class="badge-soft-success">{{ sc.get_cie }}</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4" class="text-center text-muted py-4">No data available.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'info/base.html' %}
+{% load static %}
+
+{% block title %}Add Faculty | CollegeERP{% endblock %}
+
+{% block content %}
+  <div class="page-title">Add New Faculty</div>
+  <div class="page-sub">Create a new teacher account. The login credentials are generated automatically from the name and date of birth.</div>
+
+  <div class="card-modern card" style="max-width: 720px;">
+    <div class="card-header"><i class="fas fa-chalkboard-teacher mr-2 text-primary"></i>Faculty Information</div>
+    <div class="card-body">
+      <form method="POST" action="{% url 'add_teacher' %}">
+        {% csrf_token %}
+        <div class="form-group">
+          <label class="small font-weight-semibold text-muted">Faculty ID</label>
+          <input class="form-control" name="id" type="text" placeholder="e.g. CS01" required>
+        </div>
+        <div class="form-group">
+          <label class="small font-weight-semibold text-muted">Full Name</label>
+          <input class="form-control" type="text" name="full_name" placeholder="e.g. Anil Kumar" required>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="small font-weight-semibold text-muted">Department</label>
+              <select class="form-control" name="dept" required>
+                {% for dept in all_dept %}
+                  <option value="{{ dept.id }}">{{ dept }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="small font-weight-semibold text-muted">Gender</label>
+              <select class="form-control" name="sex" required>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small font-weight-semibold text-muted">Date of Birth</label>
+          <input class="form-control" name="dob" type="date" required>
+        </div>
+        <div class="d-flex justify-content-end mt-4">
+          <a class="btn btn-soft-secondary mr-2" href="{% url 'index' %}">Cancel</a>
+          <button type="submit" class="btn btn-primary"><i class="fas fa-save mr-1"></i>Add Faculty</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

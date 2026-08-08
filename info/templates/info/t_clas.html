@@ -1,0 +1,52 @@
+{% extends 'info/base.html' %}
+{% load static %}
+
+{% block title %}My Classes | CollegeERP{% endblock %}
+
+{% block content %}
+  <div class="page-title">
+    {% if choice == 1 %}Attendance{% elif choice == 2 %}Marks{% else %}Reports{% endif %}
+  </div>
+  <div class="page-sub">Choose a course to proceed.</div>
+
+  <div class="card-modern card">
+    <div class="card-header">
+      <i class="fas fa-list mr-2 text-primary"></i>My Courses
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-modern">
+          <thead>
+            <tr>
+              <th>Class</th>
+              <th>Course</th>
+              <th class="text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ass in teacher1.assign_set.all %}
+            <tr>
+              <td class="font-weight-semibold">{{ ass.class_id }}</td>
+              <td>{{ ass.course.name }} <span class="badge-soft-primary ml-1">{{ ass.course.shortname }}</span></td>
+              <td class="text-right">
+                {% if choice == 1 %}
+                  <a class="btn btn-soft-primary btn-sm" href="{% url 't_class_date' ass.id %}"><i class="fas fa-clipboard-check mr-1"></i>Enter Attendance</a>
+                  <a class="btn btn-soft-warning btn-sm" href="{% url 't_extra_class' ass.id %}"><i class="fas fa-plus mr-1"></i>Extra Class</a>
+                  <a class="btn btn-soft-secondary btn-sm" href="{% url 't_student' ass.id %}"><i class="fas fa-users mr-1"></i>View Students</a>
+                {% elif choice == 2 %}
+                  <a class="btn btn-soft-primary btn-sm" href="{% url 't_marks_list' ass.id %}"><i class="fas fa-chart-bar mr-1"></i>Enter Marks</a>
+                  <a class="btn btn-soft-secondary btn-sm" href="{% url 't_student_marks' ass.id %}"><i class="fas fa-users mr-1"></i>View Students</a>
+                {% elif choice == 3 %}
+                  <a class="btn btn-soft-danger btn-sm" href="{% url 't_report' ass.id %}"><i class="fas fa-file-alt mr-1"></i>Generate Report</a>
+                {% endif %}
+              </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="3" class="text-center text-muted py-4">No courses assigned to you yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

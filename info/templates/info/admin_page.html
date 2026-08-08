@@ -1,0 +1,152 @@
+{% extends 'info/base.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard | CollegeERP{% endblock %}
+
+{% block content %}
+  <div class="hero-banner fade-up">
+    <h1>Administrator Dashboard</h1>
+    <p><i class="fas fa-user-shield mr-2"></i>Manage students, faculty, departments, courses and everything in between.</p>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="stat-card">
+        <div class="stat-icon icon-indigo"><i class="fas fa-user-graduate"></i></div>
+        <div>
+          <div class="stat-label">Students</div>
+          <div class="stat-value">{{ student_count }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="stat-card">
+        <div class="stat-icon icon-emerald"><i class="fas fa-chalkboard-teacher"></i></div>
+        <div>
+          <div class="stat-label">Faculty</div>
+          <div class="stat-value">{{ teacher_count }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="stat-card">
+        <div class="stat-icon icon-amber"><i class="fas fa-building"></i></div>
+        <div>
+          <div class="stat-label">Departments</div>
+          <div class="stat-value">{{ dept_count }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="stat-card">
+        <div class="stat-icon icon-rose"><i class="fas fa-school"></i></div>
+        <div>
+          <div class="stat-label">Classes</div>
+          <div class="stat-value">{{ class_count }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="stat-card">
+        <div class="stat-icon icon-cyan"><i class="fas fa-book-open"></i></div>
+        <div>
+          <div class="stat-label">Courses</div>
+          <div class="stat-value">{{ course_count }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="stat-card">
+        <div class="stat-icon icon-indigo"><i class="fas fa-random"></i></div>
+        <div>
+          <div class="stat-label">Assignments</div>
+          <div class="stat-value">{{ assign_count }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6 mb-3">
+      <div class="stat-card h-100">
+        <div class="stat-icon icon-emerald"><i class="fas fa-bolt"></i></div>
+        <div class="w-100">
+          <div class="stat-label">Quick Actions</div>
+          <div class="mt-2">
+            <a class="btn btn-soft-primary btn-sm" href="{% url 'add_student' %}"><i class="fas fa-user-plus mr-1"></i>Add Student</a>
+            <a class="btn btn-soft-warning btn-sm" href="{% url 'add_teacher' %}"><i class="fas fa-chalkboard-teacher mr-1"></i>Add Faculty</a>
+            <a class="btn btn-soft-secondary btn-sm" href="/admin/"><i class="fas fa-cog mr-1"></i>Admin Panel</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-modern card mb-4">
+    <div class="card-header"><i class="fas fa-user-graduate mr-2 text-primary"></i>Students &middot; {{ student_count }}</div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-modern">
+          <thead>
+            <tr>
+              <th>USN</th>
+              <th>Name</th>
+              <th>Class</th>
+              <th>Department</th>
+              <th>Gender</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in students %}
+            <tr>
+              <td class="font-weight-semibold">{{ s.USN }}</td>
+              <td>
+                <span class="avatar mr-2">{{ s.name|first }}</span>
+                {{ s.name }}
+              </td>
+              <td>{{ s.class_id }}</td>
+              <td>{{ s.class_id.dept.name }}</td>
+              <td>{{ s.sex }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" class="text-center text-muted py-4">No students yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-modern card mb-4">
+    <div class="card-header"><i class="fas fa-chalkboard-teacher mr-2 text-success"></i>Faculty &middot; {{ teacher_count }}</div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-modern">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Department</th>
+              <th>Gender</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for t in teachers %}
+            <tr>
+              <td class="font-weight-semibold">{{ t.id }}</td>
+              <td>
+                <span class="avatar mr-2">{{ t.name|first }}</span>
+                {{ t.name }}
+              </td>
+              <td>{{ t.dept.name }}</td>
+              <td>{{ t.sex }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4" class="text-center text-muted py-4">No faculty yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

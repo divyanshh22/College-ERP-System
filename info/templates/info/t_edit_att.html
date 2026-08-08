@@ -1,0 +1,57 @@
+{% extends 'info/base.html' %}
+{% load static %}
+
+{% block title %}Edit Attendance | CollegeERP{% endblock %}
+
+{% block content %}
+  <div class="page-title">Edit Attendance</div>
+  <div class="page-sub">{{ assc.assign.course.name }} &middot; {{ assc.date }}</div>
+
+  <form action="{% url 'confirm' assc.id %}" method="post">
+    {% csrf_token %}
+    <div class="card-modern card">
+      <div class="card-header"><i class="fas fa-edit mr-2 text-warning"></i>Students</div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-modern">
+            <thead>
+              <tr>
+                <th>Student Name</th>
+                <th class="text-center">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for att in att_list %}
+              <tr>
+                <td class="font-weight-semibold">{{ att.student.name }}</td>
+                <td class="text-center">
+                  <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    {% if att.status %}
+                      <label class="btn btn-outline-success btn-sm active">
+                        <input type="radio" name="{{ att.student.USN }}" autocomplete="off" value="present" checked> Present
+                      </label>
+                      <label class="btn btn-outline-danger btn-sm">
+                        <input type="radio" name="{{ att.student.USN }}" autocomplete="off" value="absent"> Absent
+                      </label>
+                    {% else %}
+                      <label class="btn btn-outline-success btn-sm">
+                        <input type="radio" name="{{ att.student.USN }}" autocomplete="off" value="present"> Present
+                      </label>
+                      <label class="btn btn-outline-danger btn-sm active">
+                        <input type="radio" name="{{ att.student.USN }}" autocomplete="off" value="absent" checked> Absent
+                      </label>
+                    {% endif %}
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="text-right mt-3">
+          <button class="btn btn-primary" type="submit"><i class="fas fa-save mr-1"></i>Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </form>
+{% endblock %}

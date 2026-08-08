@@ -1,0 +1,44 @@
+{% extends 'info/base.html' %}
+{% load static %}
+
+{% block title %}Marks | CollegeERP{% endblock %}
+
+{% block content %}
+  <div class="page-title">Marks Summary</div>
+  <div class="page-sub">Your marks for each course this semester.</div>
+
+  <div class="card-modern card">
+    <div class="card-header"><i class="fas fa-chart-bar mr-2 text-primary"></i>Marks</div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-modern">
+          <thead>
+            <tr>
+              <th>Course ID</th>
+              <th>Course Name</th>
+              <th>Internal 1</th>
+              <th>Internal 2</th>
+              <th>Internal 3</th>
+              <th>Event 1</th>
+              <th>Event 2</th>
+              <th>SEE</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for sc in sc_list %}
+            <tr>
+              <td class="font-weight-semibold">{{ sc.course_id }}</td>
+              <td>{{ sc.course.name }}</td>
+              {% for m in sc.marks_set.all %}
+                <td>{{ m.marks1 }}</td>
+              {% endfor %}
+            </tr>
+            {% empty %}
+            <tr><td colspan="8" class="text-center text-muted py-4">No courses assigned yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}
