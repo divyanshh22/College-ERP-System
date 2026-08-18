@@ -23,8 +23,8 @@ def index(request):
             'class_count': teacher.assign_set.values('class_id').distinct().count(),
             'student_count': Student.objects.filter(class_id__assign__teacher=teacher).distinct().count(),
             'upcoming': AttendanceClass.objects.filter(
-                assign__teacher=teacher, date__gte=timezone.now().date()
-            ).order_by('date')[:5],
+                assign__teacher=teacher, date__lte=timezone.now().date()
+            ).order_by('-date')[:5],
         }
         return render(request, 'info/t_homepage.html', context)
     if request.user.is_student:
