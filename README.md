@@ -43,14 +43,17 @@ pip install -r requirements.txt
 #    e.g.  CREATE DATABASE erpdb;
 
 # 4. Configure the database connection
-#    Defaults are already set in CollegeERP/settings.py (erpdb / postgres / localhost:5432).
-#    To override them, set these environment variables:
+#    Create a .env file (see .env.example) with your DB credentials:
 #      DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
+#    Or export them as environment variables.
 
 # 5. Run migrations
 python manage.py migrate
 
-# 6. Seed the database with demo data (admin, 4 students, 6 faculty, courses, timetable)
+# 6. Seed the database with demo data (admin, students, faculty, courses, timetable)
+#    Set an admin password first (or it defaults to 'changeme'):
+set SEED_ADMIN_PASSWORD=your_secure_password   # Windows
+export SEED_ADMIN_PASSWORD=your_secure_password # Linux / macOS
 python manage.py seed_data
 
 # 7. Start the server
@@ -84,7 +87,7 @@ After the first deploy, open the service's **Shell** tab and run `python manage.
 
 | Role | Username | Password     |
 |------|----------|--------------|
-| Admin | `admin` | `Hitman@4165` |
+| Admin | `admin` | The value of `SEED_ADMIN_PASSWORD` you set when seeding (default `changeme`) |
 
 The admin dashboard lets you add students and faculty and gives quick access to the Django admin panel at **http://127.0.0.1:8000/admin**.
 

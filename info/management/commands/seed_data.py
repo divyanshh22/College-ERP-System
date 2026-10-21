@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+import os
 import random
 
 from django.contrib.auth import get_user_model
@@ -44,14 +45,15 @@ class Command(BaseCommand):
         self.stdout.write('Seeding CollegeERP database...')
 
         # ---------- Admin ----------
+        admin_password = os.environ.get('SEED_ADMIN_PASSWORD', 'changeme')
         admin, created = User.objects.get_or_create(username='admin')
-        admin.set_password('Hitman@4165')
+        admin.set_password(admin_password)
         admin.first_name = 'System'
         admin.last_name = 'Administrator'
         admin.is_superuser = True
         admin.is_staff = True
         admin.save()
-        self.stdout.write('  [OK] Admin user created (admin / Hitman@4165)')
+        self.stdout.write('  [OK] Admin user created (admin / SEED_ADMIN_PASSWORD)')
 
         # ---------- Departments ----------
         depts = {}
@@ -270,6 +272,6 @@ class Command(BaseCommand):
         self.stdout.write('  [OK] Attendance totals synced')
 
         self.stdout.write(self.style.SUCCESS('\nSeeding complete!\n'))
-        self.stdout.write('Admin login : admin / Hitman@4165')
+        self.stdout.write('Admin login : admin / %s' % admin_password)
         self.stdout.write('Student login: rahul_001 / rahul_2004')
         self.stdout.write('Faculty login: anil_cs01 / anil_1980')
